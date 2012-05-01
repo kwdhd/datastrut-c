@@ -5,12 +5,18 @@
 #include <stdio.h>
 #include <memory.h>
 #include <vector>
+//#include "ParTree.h"
 
 #define UNVISITED (1<<31)
 #define INFINITY (~(unsigned int)0>>3)
 #define VISITED 1
 
 using namespace std;
+
+// 
+class Dist;
+
+
 
 // Edge Class
 class Edge
@@ -22,6 +28,10 @@ public:
     Edge(int from = -1, int to = -1, int weight = 0)
     {
         from = from; to = to; weight = weight;
+    }
+    Edge(const Edge &e)
+    {
+        from = e.from; to = e.to; weight = e.weight;
     }
     int Weight()
     {
@@ -149,7 +159,6 @@ public:
     bool InsertVertex(int oneVertex); // 插入一个节点,把对角线上相应元素置为1
     bool DelVertex(int oneVertex);
 
-    void prim(int vertex);//生成最小树
     int DFS(int vertex);//深度优先搜索
     void DFS(int node,int v[],int& n);
     void BFS(int vertex);//广度优先搜索
@@ -171,17 +180,22 @@ public:
         printf("matrix...\n");
         Print_Matrix();
     }
+
+    vector<Edge>& Prim(vector<Edge> &arrEdge,int v = 0);
+    vector<Edge>& Kruskal(vector<Edge> &arrEdge, int v = 0);
+    
+    void Bellman_Ford(int v, vector<Dist>& res);
 };
 
 class Dist
 {
 public:
-    int index;
-    int len;
-    int pre;
+    int index;  // 定点编号
+    int len;    // 权值
+    int pre;    // 通过pre结点
     Dist()
     {
-        index = 0; len = 0; pre =0;
+        index = -1; len = INFINITY; pre =-1; // 一开始距离为无穷远
     }
     Dist(int ix, int len, int pre)
     {
@@ -215,7 +229,6 @@ public:
     {
         return (this->len <= arg.len);
     }
-
 };   
 
 // 用邻接矩阵存储的有向图
@@ -243,7 +256,8 @@ public:
     int** Floyd();
     Dist** Floyd(Dist **&arr);
     vector<vector<Dist>> * Path_Dijkstra();
-    vector<Edge>& Prim(vector<Edge> &arrEdge,int v = 0);
+
+
 
 
     void Debug()

@@ -90,6 +90,16 @@ void test_Graphm()
     {
         printf("index:%d,len:%d,pre:%d  \n",i->index,i->len,i->pre);
     }
+
+    printf("Fellman_Frod...\n");
+    v1.clear();
+    gdm2.Bellman_Ford(0,v1);
+    for(vector<Dist>::iterator i = v1.begin(); i != v1.end(); i++)
+    {
+        printf("index:%d,len:%d,pre:%d  \n",i->index,i->len,i->pre);
+    }
+
+
     printf("Floyd...\n");
     Dist **arr;
     gdm2.Floyd(arr);
@@ -111,13 +121,30 @@ void test_Graphm()
     }
 
     // 最小生成树
+    
     int data5[][3] = {{0,1,10},{0,4,19},{0,5,21},{1,2,5},{1,3,6},{1,5,11},{2,3,6},{3,5,14},{3,4,18},{4,5,33}};
+    int len5 = 10;
     Graphm gm3 = Graphm(6);
+    for(int i = 0; i < len5; i++)
+    {
+       gm3.SetEdge(data5[i][0],data5[i][1],data5[i][2]);
+    }
+    printf("gm3...\n");
+    gm3.Debug();
+
     printf("Prim...\n");
     vector<Edge> edges;
-    //gm3.Prim(edges);
-    //for(vector<Edge>::iterator i = edges.begin(); i != edges.end(); i++)
-    //{
-    //    printf("from:%d,to:%d,weight:%d  \n",i->from,i->to,i->weight);
-    //}
+    gm3.Prim(edges);
+    for(vector<Edge>::iterator i = edges.begin(); i != edges.end(); i++)
+    {
+        printf("from:%d,to:%d,weight:%d  \n",i->from,i->to,i->weight);
+    }
+    
+    printf("Kruskal...\n");
+    edges.clear();
+    gm3.Prim(edges);
+    for(vector<Edge>::iterator i = edges.begin(); i != edges.end(); i++)
+    {
+        printf("from:%d,to:%d,weight:%d  \n",i->from,i->to,i->weight);
+    }
 }
