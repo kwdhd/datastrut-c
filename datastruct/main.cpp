@@ -5,10 +5,14 @@
 #include <vector>
 #include <algorithm>
 #include "ParTree.h"
+#include "DP.h"
+
 using namespace std;
 
 void test_Graphm();
-
+void test_DTri();
+void test_Knapsack();
+//
 void main()
 {
     //printf("%d\n",~(unsigned int)0>>1);
@@ -36,7 +40,9 @@ void main()
     //}
 
     // test Graphm
-    test_Graphm();
+    //test_Graphm();
+    //test_DTri();
+    test_Knapsack();
     getchar();
 }
 
@@ -147,4 +153,88 @@ void test_Graphm()
     {
         printf("from:%d,to:%d,weight:%d  \n",i->from,i->to,i->weight);
     }
+}
+
+void test_DTri()
+{
+    // 构造测试数据
+    const int level = 4;
+    int len = 10;
+
+    int **arr = (int**)malloc(level*sizeof(int*));
+    for(int i=0; i<level; i++)
+    {
+        arr[i] = (int*)malloc(level*sizeof(int));
+    }
+    int temp[] =  {1,-1,-1,-1,3,2,-1,-1,4,10,1,-1,4,3,2,20};
+    int k = 0;
+    for(int i=0; i<level; i++)
+    {
+        for(int j=0; j<level; j++)
+            arr[i][j] = temp[k++];
+    }
+    DTri dt = DTri(4,arr);
+    printf("print DTri...\n");
+    dt.PrintDTri();
+
+    int **res = (int**)malloc(level*sizeof(int*));
+    int len2 = level*sizeof(int);
+    int len1 = level*sizeof(int*);
+    for(int i=0; i<level; i++)
+    {
+        res[i] = (int*)malloc(level*sizeof(int));
+        memset(res[i],-1,level*sizeof(int));
+        for(int j=0; j<level; j++)
+        {
+            printf("%d  ",res[i][j]);
+        }
+        printf("\n");
+    }
+    //memset(res,-1,sizeof(int)*level);
+    //printf("result arr...\n");
+    //for(int i=0; i<level; i++)
+    //{
+    //    printf("%d ",res[i]);
+    //}    
+    //printf("\n");
+
+    int sum = dt.MaxSum(0,0,res);
+    printf("Max Sum: %d \n",sum);
+    printf("res arr\n");
+    for(int i=0; i<level; i++)
+    {
+        for(int j=0; j<level; j++)
+        {
+            if(res[i][j]>0)
+            printf("%d  ",res[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+    // no-recur
+    int sum1 = dt.MaxSum_no_recur();
+    printf("Max Sum: %d \n",sum1);
+
+}
+
+void test_Knapsack()
+{   //
+    int num = 5;
+    int c = 10;
+    int w[] = {6,3,5,4,6};
+    int v[] = {2,2,6,5,4};
+    //
+
+    Knapsack pack = Knapsack(num,c,v,w);
+    pack.PrintKnapsack();
+    int res = pack.MaxWeight();
+    //
+    printf("max weight: %d\n",res);
+    
+    // less space version
+    pack.PrintKnapsack();
+    int res1 = pack.MaxWeight_less();
+    //
+    printf("max weight: %d\n",res1);
 }

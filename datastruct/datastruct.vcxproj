@@ -79,7 +79,9 @@
     <ClCompile Include="ParTree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DP.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="KwdhdLib.h" />
     <ClInclude Include="ParTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
