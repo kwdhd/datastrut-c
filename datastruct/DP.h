@@ -223,4 +223,223 @@ public:
         return res[c];
     }
 };
+
+// Largest sub-segment
+int MaxSumArr(int *arr, int len)
+{
+    int sum = 0;
+    int max = 0;
+    for(int i = 0; i<len; i++)
+    {
+        if((sum+arr[i])>0)
+        {
+            sum += arr[i];
+            if( sum > max)
+                max = sum;
+        }
+        else
+            sum = 0;
+    }
+    return max;
+}
+int MaxSumMatrix(int **arr, int x, int y)
+{
+    int sum = 0;
+    int *b = new int[y];
+    for(int i=0; i<x; i++) // 行
+    {
+        for(int k=0; k<y; k++)
+            b[k] = 0;
+        for(int j=i; j<x; j++)
+        {
+            for(int k=0; k<y; k++)
+                b[k]+=arr[j][k];
+            int max = MaxSumArr(b,y);
+            if(max > sum)
+                sum = max;
+        }
+    }
+    return sum;
+}
+// 最大子M段和
+int MaxSumM(int *arr, int n, int m)    // 
+{
+    int sum = 0;
+
+    if(n<m || m<1)  return 0;
+    int **b = new int*[m+1];  // m row
+    for(int i=0; i<m; i++)
+        b[i] = new int[n+1];  // n col
+    for(int i=0; i<=m; i++)
+        b[i][0] = 0;
+    for(int j=1; j<=m; j++)
+        b[0][j] = 0;
+    for(int i=1; i<=m; i++)
+    {
+        for(int j=i; j<=n-m+i; j++)
+        {
+            if(j>i)
+            {
+                b[i][j] = b[i][j-1] + arr[j];
+                for(int k=i-1; k<j; k++)
+                    if(b[i][j]<b[i-1][k]+arr[j])
+                        b[i][j]=b[i-1][j]+arr[j];
+            }
+            else
+                b[i][j] = b[i-1][j-1]+arr[j];
+        }
+    }
+
+    for(int j = m; j <=n; j++)
+        if(sum<b[m][j]) sum = b[m][j];
+
+    return sum;
+}
+int LCS(char *X, int m, char *Y, int n)
+{
+    if( m == 0 || n == 0)
+        return 0;
+    
+    if( X[m] == Y[n] )
+        return LCS(X, m-1, Y, n-1) + 1;
+    else
+    {
+        return max(LCS(X,m-1,Y,n),LCS(X,m,Y,n-1));
+    }
+ //   return -1;
+}
+
+int Matrix_Multiply(int *d,int len)
+{
+    int **res = (int**)malloc(sizeof(int*)*len);
+    for(int i=0; i<len; i++)
+    {
+        res[i] = (int*)malloc(sizeof(int)*len);
+        memset(res[i],0,len*sizeof(int));
+      /*  for(int j = 0; j < len; j++)
+            printf("%d  ",res[i][j]);
+        printf("\n");*/
+    }
+    int **s = (int**)malloc(sizeof(int*)*len);
+    for(int i=0; i<len; i++)
+    {
+        s[i] = (int*)malloc(sizeof(int)*len);
+        memset(s[i],-1,len*sizeof(int));
+    }
+
+    for(int j = 1; j< len; j++)
+    {
+        for(int i = 0; i < len; i++)// i..i+j
+        {
+            if(i + j < len)
+            {
+                int temp = 0;
+                for(int k = i; k < i+j; k++)
+                {   // 从k处断裂
+                    temp = res[i][k]+res[k+1][j+i] + d[i]*d[k+1]*d[j+i+1];
+                   // printf(" temp: %d\n",temp);
+                    if( temp < res[i][j+i] || res[i][j+i] == 0)
+                    {
+                        res[i][j+i] = temp;
+                        s[i][j+i] = k;
+                    }
+                }
+            }
+        }
+    }
+    printf("res: \n");
+    for(int i = 0; i < len; i++)
+    {
+        for(int j = 0; j < len; j++)
+        {
+            printf("%d ",res[i][j]);
+        }
+        printf("\n");
+    }
+    printf("s: \n");
+    for(int i = 0; i < len; i++)
+    {
+        for(int j = 0; j < len; j++)
+        {
+            printf("%d ",s[i][j]);
+        }
+        printf("\n");
+    }
+    //printf("%d\n",res[0][len-1]);
+    return res[0][len-1];
+}
+
+int LookUp(int *m,int i, int j, int **res, int **s)
+{
+    if(res[i][j] != 0)
+        return res[i][j];
+    if(i >= j)
+        return 0;
+    for(int k = i; k < j; k++)
+    {
+        int t1 = LookUp(m,i,k,res,s);
+        int t2 = LookUp(m,k+1,j,res,s);
+        int t3 = m[i]*m[k+1]*m[j+1];
+        int t =  t1 + t2 + t3;
+       // printf("temp: %d,t1: %d, t2: %d, t3: %d, i: %d, j: %d, k: %d, res[%d][%d]: %d, s[%d][%d]: %d\n",t,t1,t2,t3,i,j,k,i,j,res[i][j],i,j,s[i][j]);
+        if( t < res[i][j] || res[i][j] == 0)
+        {
+            res[i][j] = t;
+            s[i][j] = k;
+        }
+    }
+    return res[i][j];
+}
+int Memorized_MatrixMultiply(int *m, int len)
+{
+    int **res = (int**)malloc(sizeof(int*)*len);
+    for(int i=0; i<len; i++)
+    {
+        res[i] = (int*)malloc(sizeof(int)*len);
+        memset(res[i],0,len*sizeof(int));
+    }
+
+    int **s = (int**)malloc(sizeof(int*)*len);
+    for(int i=0; i<len; i++)
+    {
+        s[i] = (int*)malloc(sizeof(int)*len);
+        memset(s[i],-1,len*sizeof(int));
+    }
+    int r = LookUp(m,0,len-1,res,s);
+    printf("res: \n");
+    for(int i = 0; i < len; i++)
+    {
+        for(int j = 0; j < len; j++)
+        {
+            printf("%d ",res[i][j]);
+        }
+        printf("\n");
+    }
+    printf("s: \n");
+    for(int i = 0; i < len; i++)
+    {
+        for(int j = 0; j < len; j++)
+        {
+            printf("%d ",s[i][j]);
+        }
+        printf("\n");
+    }
+
+    return r;
+}
+void test_Matrix_Multiply()
+{
+    int arr[] = {30,35,15,5,10,20,25};
+    int len = 6;
+    for(int i = 0; i <= len; i++)
+        printf("%d ",arr[i]);
+    printf("\n");
+
+    int res = Matrix_Multiply(arr,len);
+    printf("res: %d\n",res);
+
+    int res2 = Memorized_MatrixMultiply(arr, len);
+    printf("res: %d\n",res2);
+}
+
 #endif

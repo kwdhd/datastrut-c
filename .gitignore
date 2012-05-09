@@ -1,0 +1,12 @@
+*/Debug/*
+*/ipch/*
+*.sdf
+*.tlog
+*.exe
+*.pch
+*.obj
+*~
+*.dll
+*.obj
+*/Debug/*.*
+*/ipch/*.*

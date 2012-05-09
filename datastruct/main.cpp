@@ -12,6 +12,10 @@ using namespace std;
 void test_Graphm();
 void test_DTri();
 void test_Knapsack();
+void test_MaxSum();
+void intepret();
+void test_LCS();
+
 //
 void main()
 {
@@ -42,7 +46,11 @@ void main()
     // test Graphm
     //test_Graphm();
     //test_DTri();
-    test_Knapsack();
+    //test_Knapsack();
+    //test_MaxSum();
+    //intepret();
+    //test_LCS();
+    test_Matrix_Multiply();
     getchar();
 }
 
@@ -237,4 +245,87 @@ void test_Knapsack()
     int res1 = pack.MaxWeight_less();
     //
     printf("max weight: %d\n",res1);
+}
+
+void test_MaxSum()
+{
+    int arr[] = {-2,11,-4,13,-5,-2};
+    int len1 = 6;
+    for(int i = 0; i < len1; i++)
+        printf("%d ",arr[i]);
+    printf("\n");
+
+    int res1 = MaxSumArr(arr,len1);
+    printf("res: %d\n",res1);
+
+
+    int temp[][4] = {{0,-2,-7,0},{9,2,-6,2},{-4,1,4,1},{-1,8,0,2}};
+    int x = 4, y = 4;
+    int **arr2 = (int**)malloc(sizeof(int*)*x);
+    for(int i=0; i<x; i++)
+    {
+        arr2[i] = (int*)malloc(sizeof(int*)*y);
+        for(int j=0; j<y; j++)
+            arr2[i][j] = temp[i][j];
+    }
+
+    
+    for(int i=0; i<x; i++)
+    {
+        for(int j=0; j<y; j++)
+            printf("%d ",arr2[i][j]);
+        printf("\n");
+    }
+    int res2 = MaxSumMatrix(arr2,x,y);
+    printf("res: %d\n",res2);
+
+    int arr3[] = {-2,11,-4,13,-5,-2,0};
+    int len3 = 6;
+
+    for(int i = 1; i <=len3; i++)
+    {
+        printf("res: %d\n",MaxSumM(arr3,len3,i));
+    }
+
+}
+
+void intepret()
+{
+    //char str[] = "g fmnc wms bgblr rpylqjyrc gr zw fylb. rfyrq ufyr amknsrcpq ypc dmp. bmgle gr gl zw fylb gq glcddgagclr ylb rfyr'q ufw rfgq rcvr gq qm jmle. sqgle qrpgle.kyicrpylq() gq pcamkkclbcb. lmu ynnjw ml rfc spj.";
+    char str[] = "http://www.pythonchallenge.com/pc/def/map.html";
+    int len = strlen(str);
+    char *res = (char*)malloc(sizeof(char)*(len+1));
+    char pattern[] = "cdefghijklmnopqrstuvwxyzab";
+    printf("%s",str);
+    for(int i = 0; i < len; i++)
+    {
+        if( str[i] >='a' && str[i] <='z')
+        {
+            res[i] = pattern[str[i]-'a'];
+           // printf("%c->%c\n",str[i],res[i]);
+        }
+        else
+        {
+            res[i] = str[i];
+        }
+    }
+    res[len] = '\0';
+    for(int i = 0; i < len; i++)
+    {
+        printf("%c",res[i]);
+    }
+    printf("\n");
+   
+}
+
+void test_LCS()
+{
+    char arr1[] = "abcbdab";
+    int len1 = strlen(arr1);
+
+    char arr2[] = "bdcaba";
+    int len2 = strlen(arr2);
+
+    int res = LCS(arr1,len1,arr2,len2);
+    printf("res :%d\n",res);
 }
